@@ -1,0 +1,18 @@
+﻿backend:
+  name: git-gateway
+  repo: 你的用户名/仓库名
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: goods
+    label: 商品管理
+    folder: data
+    create: true
+    slug: "{{id}}"
+    extension: json
+    fields:
+      - {label:"商品ID", name:"id", widget:"number"}
+      - {label:"商品名称", name:"title", widget:"string"}
+      - {label:"商品价格", name:"price", widget:"number"}
+      - {label:"商品描述", name:"desc", widget:"text"}

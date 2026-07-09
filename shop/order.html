@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单结算</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 30px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 24px;
+        }
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #409eff;
+            margin-bottom: 24px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        #orderInfo h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        #orderInfo p {
+            font-size: 18px;
+            color: #e64340;
+            font-weight: bold;
+        }
+        .form-item {
+            margin: 16px 0;
+        }
+        .form-item label {
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+        }
+        .form-item input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        #submitBtn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #409eff;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #submitBtn:hover {
+            background: #337ecc;
+        }
+    </style>
+</head>
+<body>
+    <h1>订单结算页面</h1>
+    <a href=" " class="back-link">← 返回商品首页</a >
+
+    <div class="card" id="orderInfo">加载商品信息...</div>
+
+    <div class="card">
+        <div class="form-item">
+            <label>收货人姓名</label>
+            <input id="username" placeholder="请填写真实姓名">
+        </div>
+        <button id="submitBtn" onclick="submitOrder()">提交订单</button>
+    </div>
+
+    <script>
+        // 读取云端商品
+        let goods = [];
+        let buyId = localStorage.getItem('buyId');
+        const infoDom = document.getElementById('orderInfo');
+
+        fetch('./data/goods.json')
+        .then(res=>res.json())
+        .then(data=>{
+            goods = data;
+            let target = goods.find(v=>v.id == buyId);
+            if(target){
+                infoDom.innerHTML = `
+                    <h3>您选购商品：${target.title}</h3>
+                    <p>应付总价：¥${target.price}</p >
+                `
+            }else{
+                infoDom.innerHTML = "<p>未选中商品，请返回首页选购</p >";
+            }
+        })
+
+        function submitOrder(){
+            let name = document.getElementById('username').value.trim();
+            if(!name) return alert("请填写收货人姓名！");
+            alert("下单成功！感谢购买");
+            location.href="index.html";
+        }
+    </script>
+</body>
+</html>

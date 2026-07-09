@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品商城首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #222;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .nav a {
+            display: inline-block;
+            text-decoration: none;
+            background: #409eff;
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            margin: 0 8px;
+            transition: 0.3s;
+        }
+        .nav a:hover {
+            background: #337ecc;
+        }
+        #goodsList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        .item:hover {
+            transform: translateY(-4px);
+        }
+        .item h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .item p:nth-of-type(1) {
+            color: #e64340;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .item p:nth-of-type(2) {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .item button {
+            width: 100%;
+            border: none;
+            padding: 10px;
+            background: #67c23a;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .item button:hover {
+            background: #52a728;
+        }
+    </style>
+</head>
+<body>
+    <h1>精选商品商城</h1>
+    <div class="nav">
+        <a href=" ">云端商品管理后台</a >
+        <a href="order.html">我的订单</a >
+    </div>
+    <div id="goodsList">加载中...</div>
+
+    <script>
+        let goods = [];
+        const listDom = document.getElementById('goodsList');
+
+        // 读取云端仓库data/goods.json商品数据（不再使用本地localStorage）
+        fetch('./data/goods.json')
+            .then(res => res.json())
+            .then(data => {
+                goods = data;
+                render();
+            })
+            .catch(() => {
+                listDom.innerHTML = "<p style='text-align:center'>暂无商品，请前往后台添加</p >";
+            })
+
+        function render(){
+            listDom.innerHTML = '';
+            goods.forEach(item=>{
+                listDom.innerHTML += `
+                <div class="item">
+                    <h3>${item.title}</h3>
+                    <p>¥${item.price}</p >
+                    <p>${item.desc}</p >
+                    <button onclick="buy(${item.id})">立即购买</button>
+                </div>
+                `
+            })
+        }
+        function buy(id){
+            localStorage.setItem('buyId',id);
+            location.href="order.html";
+        }
+    </script>
+</body>
+</html>
